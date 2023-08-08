@@ -100,3 +100,30 @@ Reactive System 을 구축하는데 필요한 program model
 ### Reactive Streams 구현체
 
 RxJava, Project Reactor, Akka Streams, Java Flow API, Reactive Extension
+
+## 03. Blocking I/O 와 Non-Blocking I/O
+
+I/O 는 일반적으로 컴퓨터 시스템이 외부의 입출력 장치들과 데이터를 주고 받는 것을 의미한다.
+
+- Ex.
+  - DB I/O : 데이터베이스에서 데이터를 조회하거나 추가하는 작업
+  - Network I/O : web application 에서 web application 으로 네트워크 통신을 하는 경우
+
+### Blocking I/O 의 특징
+
+- 작업 스레드의 작업이 종료될 때까지 요청 스레드가 차단된다
+- 스레드가 차단되는 문제를 보완하기 위해 멀티스레딩 기법을 사용할 수 있다
+- 멀티스레딩 기법 사용시 컨텍스트 스위치 전환 비용, 메모리 사용 오버헤드, 스레드 풀의 응답 지연 등의 문제가 발생할 수 있다
+
+### Non-Blocking I/O 의 특징
+
+- 작업 스레드의 종료 여부와 상관없이 요청 스레드가 차단되지 않는다
+- 적은 수의 스레드만 사용해 스레드 전환 비용이 적으므로, CPU 를 효율적으로 사용할 수 있다
+- CPU 를 많이 사용하는 작업의 경우 성능에 악영향을 미칠 수 있다
+- 사용자 요청 처리에서 응답까지 전 과정이 Non-Blocking 이어야 제대로 된 효과를 얻을 수 있다
+
+### Non-Blocking I/O 방식의 통신이 적합한 시스템
+
+- Blocking I/O 방식으로 처리하는데 한계가 있는 대량의 요청 트래픽이 발생하는 시스템
+- micro service 기반 시스템
+- streaming 또는 실시간 시스템
