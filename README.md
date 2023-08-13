@@ -1,3 +1,5 @@
+# Part01
+
 ## 01. Reactive Programming
 
 ### Reactive System 이란?
@@ -127,3 +129,32 @@ I/O 는 일반적으로 컴퓨터 시스템이 외부의 입출력 장치들과 
 - Blocking I/O 방식으로 처리하는데 한계가 있는 대량의 요청 트래픽이 발생하는 시스템
 - micro service 기반 시스템
 - streaming 또는 실시간 시스템
+
+# Part02 Project Reactor
+
+## 05. Reactor 개요 (Project Reactor)
+
+Spring Framework 팀의 주도하에 개발된 리액티브 스트림즈의 구현체
+
+Spring WebFlux 기반의 리액티브 애플리크에션을 제작하기 위한 핵심 역할을 담당
+
+공식사이트 : [https://projectreactor.io](https://projectreactor.io/)
+
+**특징**
+
+- Reactive Streams : Reactive Streams 사양을 구현한 리액티브 라이브러리
+- Non-Blocking : JVM 위에서 실행되는 Non-Blocking 어플리케이션을 제작하기 위해 필요한 핵심 기술
+- Java’s Functional API : Publisher 와 Subscriber 간의 상호작용은 Java 의 함수형 프로그래밍 API 를 통해 이루어진다
+- Flux[N] : N 개의 데이터를 emit 한다는 의미, 즉 Flux 는 0 ~ N 개, 즉 무한대의 데이터를 emit 할 수 있는 Reactor 의 Publisher
+- Mono[0|1] : 데이터를 한 건도 emit 하지 않거나 단 한건만 emit 하는 단발성 데이터 emit 에 특화된 Publisher
+- Well-suited for microservices : 마이크로 서비스 기반 시스템에서 수많은 서비스들 간에 지속적으로 발생하는 I/O 를 처리하기에 적합한 기술
+- Backpressure-ready network : Publisher 로부터 전달받은 데이터를 처리하는 데 있어 과부하가 걸리지 않도록 제어하는 Backpressure 를 지원하는데, 다양한 전략을 제공해준다
+
+## 07. Cold Sequence 와 Hot Sequence
+
+- Subscriber 의 구독 시점이 달라도 구독을 할 때마다 Publisher 가 데이터를 처음부터 emit 하는 과정을 Cold Sequence 라고 한다
+- Cold Sequence 흐름으로 동작하는 Publisher 를 Cold Publisher 라고 한다
+- Publisher 가 데이터를 emit 하는 과정이 한 번만 일어나고, Subscriber 가 각각의 구독 시점 이후에 emit 된 데이터만 전달받는 것을 Hot Sequence 라고 한다
+- Hot Sequence 흐름으로 동작하는 Publisher 를 Hot Publisher 라고 한다
+- share(), cache() 등의 Operator 를 사용하여 Cold Sequence 를 Hot Sequence 로 변환할 수 있다
+- Hot Sequence 는 Subscriber 의 최초 구독이 발생해야 Publisher 가 데이터를 emit 하는 Warm up 과 Subscriber 의 구독 여부와 상관없이 데이터를 emit 하는 Hot 으로 구분할 수 있다
