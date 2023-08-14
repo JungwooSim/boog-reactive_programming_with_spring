@@ -158,3 +158,15 @@ Spring WebFlux 기반의 리액티브 애플리크에션을 제작하기 위한 
 - Hot Sequence 흐름으로 동작하는 Publisher 를 Hot Publisher 라고 한다
 - share(), cache() 등의 Operator 를 사용하여 Cold Sequence 를 Hot Sequence 로 변환할 수 있다
 - Hot Sequence 는 Subscriber 의 최초 구독이 발생해야 Publisher 가 데이터를 emit 하는 Warm up 과 Subscriber 의 구독 여부와 상관없이 데이터를 emit 하는 Hot 으로 구분할 수 있다
+
+### 08. Backpressure
+
+- Publisher 가 끊임없이 emit 하는 무수히 많은 데이터를 적절하게 제어하여 데이터 처리에 있어 과부하가 걸리지 않도록 제어하는 데이터 처리 방식
+- Reactor 에서 몇가지 전략을 지원한다
+  - IGNORE : Backpressure 를 적용하지 않는 전략
+  - ERROR : Downstream 의 데이터 처리 속도가 느려서 Upstream 의 emit 속도를 따라가지 못할 경우 에러를 발생 시키는 전략
+  - DROP : Publisher 가 Downstream 으로 전달할 데이터가 버퍼에 가득 찰 경우, 버퍼 밖에서 대기 중인 데이터 중에서 먼저 emit 된 데이터부터 DROP 하는 전략
+  - LATEST : Publisher 가 Downstream 으로 전달할 데이터가 버퍼에 가득 찰 경우, 버퍼 밖에서 대기 중인 데이터 중에서 가장 최근에 emit 된 데이터부터 버퍼에 채우는 전략
+  - BUFFER : 버퍼의 데이터를 폐기하지 않고 버퍼링을 하는 전략이다. 만약 버퍼에 가득 찰 경우 아래 두가지 전략으로 삭제할 수 있다.
+    - DROP_LATEST : Publisher 가 Downstream 으로 전달할 데이터가 버퍼에 가득 찰 경우, 가장 최근에 버퍼 안에 채워진 데이터를 Drop 하는 전략
+    - DROP_OLDEST : Publisher 가  Downstream 으로 전달할 데이터가 버퍼에 가득 찰 경우, 버퍼 안에 채워진 데이터 중에서 가장 오래된 데이터를 Drop 하는 전략
