@@ -170,3 +170,13 @@ Spring WebFlux 기반의 리액티브 애플리크에션을 제작하기 위한 
   - BUFFER : 버퍼의 데이터를 폐기하지 않고 버퍼링을 하는 전략이다. 만약 버퍼에 가득 찰 경우 아래 두가지 전략으로 삭제할 수 있다.
     - DROP_LATEST : Publisher 가 Downstream 으로 전달할 데이터가 버퍼에 가득 찰 경우, 가장 최근에 버퍼 안에 채워진 데이터를 Drop 하는 전략
     - DROP_OLDEST : Publisher 가  Downstream 으로 전달할 데이터가 버퍼에 가득 찰 경우, 버퍼 안에 채워진 데이터 중에서 가장 오래된 데이터를 Drop 하는 전략
+
+### 09. Sinks
+
+- Publisher 와 Subscriber 의 기능을 모두 지닌 Processor 의 향상된 기능을 제공
+- 데이터를 emit 하는 Sinks 에는 크게 Sinks.One 와 Sinks.Many 가 있다
+- [Sinks.One](http://Sinks.One) 는 한 건의 데이터를 프로그래밍 방식으로 emit 한다
+- Sinks.Many 는 여러 건의 데이터를 프로그래밍 방식으로 emit 한다
+- Sinks.Many 의 UnicastSpec 는 단 하나의 Subscriber 에게만 데이터를 emit 한다
+- Sinks.Many 의 MulticastSpec 는 하나 이상의 Subscriber 에게 데이터를 emit 한다
+- Sinks.Many 의 MulticastReplaySpec 은 emit 된 데이터 중에서 특정 시점으로 되돌린(replay) 데이터부터 emit 한다
