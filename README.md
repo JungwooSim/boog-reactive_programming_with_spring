@@ -180,3 +180,27 @@ Spring WebFlux 기반의 리액티브 애플리크에션을 제작하기 위한 
 - Sinks.Many 의 UnicastSpec 는 단 하나의 Subscriber 에게만 데이터를 emit 한다
 - Sinks.Many 의 MulticastSpec 는 하나 이상의 Subscriber 에게 데이터를 emit 한다
 - Sinks.Many 의 MulticastReplaySpec 은 emit 된 데이터 중에서 특정 시점으로 되돌린(replay) 데이터부터 emit 한다
+
+-
+
+### 10. Scheduler
+
+- Reactor 에서의 Scheduler 는 비동기 프로그래밍을 위해 사용되는 스레드를 관리해 주는 역할
+- subscribeOn() Operator 는 구독이 발생한 직후에, 실행될 스레드를 지정하는 Operator
+- publishOn() Operator 는 Downstream 으로 Signal 을 전송할 때 실행되는 스레드를 제어하는 역할을 하는 Operator 이다
+- parallel() Operator 는 Round Robin 방식으로 CPU 코어 개수만큼의 스레드를 병렬로 실행한다
+
+**10.4 publishOn() 과 subscribeOn() 의 동작 이해**
+
+- publishOn() Operator 는 한 개 이상의 사용할 수 있으며, 실행 스레드를 목적에 맞게 적절하게 분리할 수 있다
+- subscribe() Operator 와 publishOn() Operator 를 함께 사용해서 원본 Publisher 에서 데이터를 emit 하는 스레드와 emit 된 데이터를 가공 처리하는 스레드를 적절하게 분리할 수 있다
+- subscribeOn() 은 Operator 체인상에서 어떤 위치에 있든 구독 시점 직후, 즉 Publisher 가 데이터를 emit 하기 전에 실행 스레드를 변경한다
+
+**10.5 Scheduler 의 종류**
+
+- Schedulers.immediate() 는 별도의 스레드를 추가적으로 생성하지 않고, 현재 스레드에서 작업을 처리
+- Schedulers.single() 는 스레드 하나만 생성해서 Scheduler 가 제거되기 전까지 재사용
+- Schedulers.boundedElastic() 은 ExecutorService 기반의 Thread Pool 을 생성한 후, 그 안에서 정해진 수 만큼의 스레드를 사용하여 작업을 처리하고 작업이 종료된 스레드는 반납하여 재사용
+- Schedulers.boundedElastic() 은 Blocking I/O 작업에 최적화되어 있다
+- Schedulers.parallel() 은 Non-Blocking I/O 에 최적화되어 있는 Scheduler 로서 CPU 코어 수 만큼 스레드를 생성
+- Schedulers.newSingle(), Schedulers.newBoundedElastic(), Schedulers.newParallel() 메서드를 사용해서 새로운 Scheduler 인스턴스를 생성할 수 있다.
