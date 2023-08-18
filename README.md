@@ -204,3 +204,28 @@ Spring WebFlux 기반의 리액티브 애플리크에션을 제작하기 위한 
 - Schedulers.boundedElastic() 은 Blocking I/O 작업에 최적화되어 있다
 - Schedulers.parallel() 은 Non-Blocking I/O 에 최적화되어 있는 Scheduler 로서 CPU 코어 수 만큼 스레드를 생성
 - Schedulers.newSingle(), Schedulers.newBoundedElastic(), Schedulers.newParallel() 메서드를 사용해서 새로운 Scheduler 인스턴스를 생성할 수 있다.
+
+### 11. Context
+
+- 일반적으로 어떠한 상황에서 그 상황을 처리하기 위해 필요한 정보를 의미
+- 특징
+  - Operator 체인에 전파되는 key / value 형태의 저장소
+  - Subscriber 와 매핑되어 구독이 발생할 때마다 해당 구독과 연결된 하나의 Context 가 생긴다
+  - contextWriter() Operator 를 사용해서 Context 에 데이터 쓰기 작업을 할 수 있따
+  - deferContextual() Operator 를 사용해서 원본 데이터 소스 레벨에서 Context 의 데이터를 읽을 수 있다
+  - transformDeferredContextal() Operator 를 사용해서 Operator 체인의 중간에 데이터를 읽을 수 있다
+- 주의사항
+  - Context 는 Operator 체인의 아래에서 위로 전파
+  - 동일한 key 에 중복해서 저장하면 Operator 체인상에서 가장 위쪽에 위치한 contextWrite() 이 저장한 값으로 덮어쓴다
+  - Inner Sequence 내부에서는 외부 Context 에 저장된 데이터를 읽을 수 있다
+  - Inner Sequence 외부에서는 Inner Sequence 내부 Context 에 저장된 데이터를 읽을 수 없다
+  - Context 는 인증 정보 같은 직교성(독립성)을 가지는 정보를 전송하는데 적합
+
+### 12. Debugging
+
+- Hooks.onOperatorDebug() 메서드를 호출해서 디버그 모드를 활성화 할 수 있다
+- 디버그 모드 활성화 시 application 내에 있는 모든 Operator 의 Stacktrace 를 캡처하므로 프로덕트 환경에서는 사용하면 안된다
+- Reactor Tools 에서 지원하는 ReactorDebugAgent 를 사용하여 프로덕트 환경에서 디버그 모드를 대체 할 수 있다
+- checkpoint() Operator 를 사용하면 특정 Operator 체인 내의  Stacktrace 만 캡처 한다
+- log() Operator 를 추가하면 추가한 지점의 Reactor Signal 을 출력한다
+- log() Operator 는 사용 개수에 제한이 없으므로 1개 이상의 log() Operator 로 Reactor Sequence 의 내부 동작을 좀 더 상세하게 분석하며 디버깅 할 수 있다
