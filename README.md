@@ -229,3 +229,71 @@ Spring WebFlux 기반의 리액티브 애플리크에션을 제작하기 위한 
 - checkpoint() Operator 를 사용하면 특정 Operator 체인 내의  Stacktrace 만 캡처 한다
 - log() Operator 를 추가하면 추가한 지점의 Reactor Signal 을 출력한다
 - log() Operator 는 사용 개수에 제한이 없으므로 1개 이상의 log() Operator 로 Reactor Sequence 의 내부 동작을 좀 더 상세하게 분석하며 디버깅 할 수 있다
+
+### 14. Operators
+
+**14.2 Sequence 생성을 위한 Operator**
+
+- just() : Hot Publisher 이므로 Subscriber 의 구독 여부와 상관없이 데이터를 emit 하며, 구독이 발생하면 emit 된 데이터를 다시 replay 하여 Subscriber 에게 전달
+- defer() : 구독이 발생하기 전까지 데이터의 emit 을 지연시키기 때문에 just() Operators 를 defer() 로 감싸게 되면 실제 구독이 발생해야 데이터를 emit 한다
+- using() : 파라미터로 전달받은 resource 를 emit 하는 Flux 를 생성
+- generator() : 프로그래밍 방식으로 Signal 이벤트를 발생시키며, 동기적으로 데이터를 하나씩 순차적으로 emit 한다
+- create() : generator() Operator 와 마찬가지로 프로그래밍 방식으로 Signal 이벤트를 발생시키지만 generate() Operator 와 달리 한 번에 여러 건의 데이터를 비동기적으로 emit 할 수 있다
+
+**14.3 Sequence 필터링 Operator**
+
+- filter
+- skip
+- take
+- next
+
+**14.4 Sequence 변환 Operator**
+
+- map
+- flatMap
+- concat
+- merge
+- zip
+- and
+- collectList
+- collectMap
+
+**14.5 Sequence 의 내부 동작 확인을 위한 Operator**
+
+- doOnSubscribe() : Publisher 가 구독 중일 때, 트리거되는 동작을 추가
+- doOnRequest() : Publisher 가 요청을 수신할 때, 트리거되는 동작을 추가
+- doOnNext() : Publisher 가 데이터를 emit 할 때, 트리거되는 동작을 추가
+- doOnComplete() : Publisher 가 성공적으로 완료되었을 때, 트리거되는 동작을 추가
+- doOnError() : Publisher 가 에러가 발생한 상태로 종료되었을 때, 트리거되는 동작을 추가
+- doOnCancel() : Publisher 가 취소되었을 때, 트리거되는 동작을 추가
+- doOnTerminate() : Publisher 가 성공적으로 완료되었을 때, 또는 에러가 발생한 상태로 종료되었을 때, 트리거 되는 동작을 추가
+- doOnEach() : Publisher 가 데이터를 emit 할 때, 성공적으로 완료되었을 때, 에러가 발생한 상태로 종료되었을 때 트리거되는 동작을 추가
+- doOnDiscard() : Upstream  에 있는 전체 Operator 체인의 동작 중에서 Operator 에 의해 폐기되는 요소를 조건부로 정리할 수 있다
+- doAfterTerminate() : Downstream 을 성공적으로 완료한 직후 또는 에러가 발생한 Publisher 가 종료된 직후에 트리거되는 동작을 추가
+- doFirst() : Publisher 가 구독되기 전에 트리거되는 동작을 추가
+- doFinally() : 에러를 포함하여 어떤 이유이든 간에 Publisher 가 종료된 후 트리거되는 동작을 추가
+
+**14.6 에러 처리를 위한 Operator**
+
+- error
+- onErrorReturn
+- onErrorResume
+- onErrorContinue
+- retry
+
+**14.7 Sequence 의 동작 시간 측정을 위한 Operator**
+
+- elapsed
+
+**14.8 Flux Sequence 분할을 위한 Operator**
+
+- window
+- buffer
+- bufferTimeout
+- groupBy
+
+**14.9 다수의 Subscriber 에게 Flux 를 Multicasting 하기 위한 Operator**
+
+- publish
+- autoConnect
+- refCount
